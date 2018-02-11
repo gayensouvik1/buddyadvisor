@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script>
+
+  		var nearest = 10000000;
+
+  		function getNearbyPlaces(latitude,longitude){
+
+  			var url = "https://maps.googleapis.com/maps/api/place/radarsearch/json?location="
+				+latitude+","+longitude+"&radius=500&type=museum&key=AIzaSyDLSlQykTgmoe5ukRxrW6AAPA-42xp3hPA";
+			
+	  		$(document).ready(function(){
+	  			
+	  			$.getJSON(url,function(data){
+	  				console.log(data);
+	  				
+	  				for (var i = 0; i < data.results.length; i++) {
+	  					var x = latitude-data.results[i].geometry.location.lat;
+	  					var y = longitude-data.results[i].geometry.location.lng;
+	  					nearest = Math.min(nearest,x*x+y*y);
+	  				}
+	  				console.log(nearest);
+
+	  			});
+
+	  		});
+  		}
+
+  		function main(){
+
+  			var myPlace;
+  			getNearbyPlaces(51.503186,-0.126446);
+
+  			window.setTimeout(function(){myPlace = nearest;console.log(myPlace);}, 1000);
+  		}
+
+  		main();
+  		
+  	</script>
+  </head>
+  <body></body>
+</html>

@@ -17,16 +17,17 @@
         padding: 0;
       }
     </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
     <script>
       // This example requires the Places library. Include the libraries=places
       // parameter when you first load the API. For example:
       // <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places">
-var result = '0';
-      function getPlaceId(){
+      var result = '0';
+
+
+      function getPlaceId(latitude,longitude){
           var geocoder = new google.maps.Geocoder;
 
-          latitude=29.8621064;               
-          longitude=77.8951395;
           var latlng = {lat: parseFloat(latitude), lng: parseFloat(longitude)};
           
           geocoder.geocode({'location': latlng}, function(results, status) {
@@ -44,7 +45,6 @@ var result = '0';
               }
 
             }); 
-              
         }
 
         function geocodePlaceId(details,placeId,geocoder, map, infowindow) {
@@ -61,7 +61,7 @@ var result = '0';
                 details = results;
                 infowindow.setContent(results[0].formatted_address);
                 infowindow.open(map, marker);
-
+// console.log(results);
               } else {
                 window.alert('No results found');
               }
@@ -85,9 +85,10 @@ var result = '0';
         var details;
 
         //async execution
-        getPlaceId();
+        getPlaceId(51.497395,-0.129714);
         //wait till prev func executes
-        window.setTimeout(function(){geocodePlaceId(details,result,geocoder, map, infowindow)}, 500);
+        window.setTimeout(function(){details = geocodePlaceId(details,result,geocoder, map, infowindow)}, 1000);
+        console.log(details);
         
       }
 
