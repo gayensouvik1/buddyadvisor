@@ -35,25 +35,7 @@
 				  center: google.maps.LatLng(-25.363,131.044)
 				});
                         
-			$.getJSON('data.json',function(data){
-        console.log(data);
-        var k=0;
-        var array=[];
-        var array2=[];
-      for(var i=0;i<100;i++){
-          var myLatLng = {lat: data.locations[i].latitudeE7, lng: data.locations[i].longitudeE7};
-                    var timestamp = data.locations[i].timestampMs;
-                    while(distance(myLatLng,{lat: data.locations[i++].latitudeE7, lng: data.locations[i++].longitudeE7})<1000)
-                    {
-                      continue;
-                    }
-          array[k]=timestamp-data.locations[i].timestampMs;
-          array2[k]=myLatLng;
-          k++;
-        }
-        console.log(array);
-        console.log(array2);
-      });
+			
 
 		}
 

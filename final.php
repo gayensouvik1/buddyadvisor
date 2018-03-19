@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <html>
   <head>
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -118,8 +118,13 @@
               for (var i = 0; i < array2.length; i++) {
                           console.log(i,myPlace[i]);
                           
+                          
                 }
-              
+
+                $.post("trying.php", {variable: myPlace})
+			    .done(function(data) {
+			        alert("done "+data);
+			    });
 
 
             }, 10000);

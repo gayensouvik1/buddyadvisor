@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div id="map"></div>
+    
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+  <script src="KmlMapParser.js"></script>
+	<script>
+   
+		function initMap()
+    {
+
+		       
+               var loc = '29.8616193, 77.8945547' // Tokyo expressed as lat,lng tuple
+    var targetDate = new Date() // Current date/time of user computer
+    var timestamp = targetDate.getTime()/1000 + targetDate.getTimezoneOffset() * 60 // Current UTC date/time expressed as seconds since midnight, January 1, 1970 UTC
+    timestamp=1496052776.596;
+    var apikey = 'AIzaSyBYi8cjvpY1YfzBmms5e2dEBTZqSBD4mjw'
+    var apicall = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + loc + '&timestamp=' + timestamp + '&key=' + apikey
+     
+    var xhr = new XMLHttpRequest() // create new XMLHttpRequest2 object
+    xhr.open('GET', apicall) // open GET request
+    xhr.onload = function(){
+    if (xhr.status === 200){ // if Ajax request successful
+        var output = JSON.parse(xhr.responseText) // convert returned JSON toLocaleStringg to JSON object
+        console.log(output.status) // log API return status for debugging purposes
+        if (output.status == 'OK'){ // if API reports everything was returned successfully
+            var offsets = output.dstOffset * 1000 + output.rawOffset * 1000 // get DST and time zone offsets in milliseconds
+            var localdate = new Date(timestamp * 1000 + offsets) // Date object containing current time of Tokyo (timestamp + dstOffset + rawOffset)
+            console.log(localdate.toLocaleString()) // Display current Tokyo date and time
+        }
+    }
+    else{
+        alert('Request failed.  Returned status of ' + xhr.status)
+    }
+}
+xhr.send()
+
+		}
+
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYi8cjvpY1YfzBmms5e2dEBTZqSBD4mjw&callback=initMap">
+    </script>
+  </body>
+</html>

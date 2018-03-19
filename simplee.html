@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Simple markers</title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+      #map {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+
+  </head>
+  <body>
+    <div id="map"></div>
+    
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script>
+    var datearray=[]
+    function distance(a,b){
+          var length=((a[0]-b[0])*(a[0]-b[0]))+(a[1]-b[1])*(a[1]-b[1]);
+          return length;
+    }
+    function findtime(a,b){
+                var i=0;               
+                var loc1=(b[0].lat)/10000000;
+                loc1=loc1.toString();
+                var loc2=(b[0].lng)/10000000;
+                loc2=loc2.toString();
+                var loc=loc1+','+loc2;
+                
+                //var loc = '29.8616193,77.8945547' // Tokyo expressed as lat,lng tuple
+                var targetDate = new Date() // Current date/time of user computer
+                var timestamp = targetDate.getTime()/1000 + targetDate.getTimezoneOffset() * 60 // Current UTC date/time expressed as seconds since midnight, January 1, 1970 UTC
+                var apikey = 'AIzaSyBYi8cjvpY1YfzBmms5e2dEBTZqSBD4mjw'
+                var apicall = 'https://maps.googleapis.com/maps/api/timezone/json?location=' + loc + '&timestamp=' + timestamp + '&key=' + apikey
+     
+                var xhr = new XMLHttpRequest() // create new XMLHttpRequest2 object
+                xhr.open('GET', apicall) // open GET request
+                xhr.onload = function(){
+                    if (xhr.status === 200){ // if Ajax request successful
+                        var output = JSON.parse(xhr.responseText) // convert returned JSON toLocaleStringg to JSON object
+                        console.log(output.status) // log API return status for debugging purposes
+                        if (output.status == 'OK'){ // if API reports everything was returned successfully
+                            var offsets = output.dstOffset * 1000 + output.rawOffset * 1000 // get DST and time zone offsets in milliseconds
+                             // Date object containing current time of Tokyo (timestamp + dstOffset + rawOffset)
+                             // Display current Tokyo date and time
+                        }
+                    }
+                    else{
+                        alert('Request failed.  Returned status of ' + xhr.status)
+                     }
+                     for(var i in a){
+                      timestamp=a[i]/1000;
+                      var localdate = new Date(timestamp * 1000 + offsets)
+
+                      datearray.push(localdate);
+                     }
+
+                }
+               xhr.send()
+            
+    }
+		function initMap(){
+			var map = new google.maps.Map(document.getElementById('map'), {
+				  zoom: 4,
+				  center: google.maps.LatLng(-25.363,131.044)
+				});
+                        
+			$.getJSON('data.json',function(data){
+        console.log(data);
+        var k=0;
+        var timearray=[];
+        var coordinatearray=[];
+      for(var i=0;i<10;i++){
+          var myLatLng = {lat: data.locations[i].latitudeE7, lng: data.locations[i].longitudeE7};
+                    var timestamp = data.locations[i].timestampMs;
+                    // while(distance(myLatLng,{lat: data.locations[i++].latitudeE7, lng: data.locations[i++].longitudeE7})<1000)
+                    // {
+                    //   continue;
+                    // }
+          timearray[k]=data.locations[i].timestampMs;
+          coordinatearray[k]=myLatLng;
+          //console.log(myLatLng);
+          k++;
+        }
+        
+        //findtime(timearray,coordinatearray);
+        //var msec = Date.parse("March 21, 2012");
+        
+        var d = new Date();
+        datearray[0]=d;
+        var object=[]
+        for(var i in datearray){
+            var temp={coordinates: coordinatearray[i],date:datearray[i].getDate(),month:datearray[i].getMonth(),year:datearray[i].getFullYear(),day:datearray[i].getDay(),hours:datearray[i].getHours(),minutes:datearray[i].getMinutes()};
+            object.push(temp);
+        }
+        var text='{ "object" :'+JSON.stringify(object)+'}';
+        var obj = JSON.parse(text);
+        console.log(obj)
+      });
+
+		}
+
+
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBYi8cjvpY1YfzBmms5e2dEBTZqSBD4mjw&callback=initMap">
+    </script>
+  </body>
+</html>
