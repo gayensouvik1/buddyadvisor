@@ -1,0 +1,15 @@
+RNN and LSTM:
+
+When we try to predict the next element from a sequence of data Recurrent neural network is very helpful. 
+For example we try to predict the next word in the sentence "Blood is ____". The answer is ofcourse 'Red'. But the machine doesn't know it. RNN takes all the sentences spoken before this sentence and try to learn (or get trained) it. After the model gets trained, the distance between the datapoint 'Blood' and 'Red' stays very closer and that's how the machine predicts the required text.
+But some cases arise where RNN fails. For example, we want to predict the last word in this paragraph.
+"I am Indian....
+My friend Roy is from Spain
+My brother lives in Japan
+I live in _____ "
+The 2nd and 3rd sentences are useless to remember to predict the word. LSTM solves it by adding some additional functionality of memorising and forgetting infos according to their usefulness. 
+
+
+Similarly in our project, a person's activity history is given over time. We can see it as a sequence of activities he does everyday. We have to predict what he is going to do today at 4pm. The problem is closer to the text prediction problem. Hence LSTM gives the most accuracy in our project.
+
+
