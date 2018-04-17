@@ -7,9 +7,80 @@ But some cases arise where RNN fails. For example, we want to predict the last w
 My friend Roy is from Spain
 My brother lives in Japan
 I live in _____ "
-The 2nd and 3rd sentences are useless to remember to predict the word. LSTM solves it by adding some additional functionality of memorising and forgetting infos according to their usefulness. 
+The 2nd and 3rd sentences are useless to remember to predict the word. Moreover, they can mislead the machine. LSTM solves it by adding some additional functionality of memorising and forgetting infos according to their usefulness. 
 
 
 Similarly in our project, a person's activity history is given over time. We can see it as a sequence of activities he does everyday. We have to predict what he is going to do today at 4pm. The problem is closer to the text prediction problem. Hence LSTM gives the most accuracy in our project.
+
+
+Approach :
+
+The whole system has not done in a single platform. It is the integration of different modules.
+1. Data Collection : Google Location History of multiple users have been collected in the first step.
+2. Cloud Setup : Since our project needs to run python scripts in order to run deep learning, we set up Google clouds for the purpose.
+3. Information extraction : Place information and Place types are extracted from the coordintes using Google Place API and updated in the database.
+4. Data refinement : Since we need continuous data for better result, we refine the data and make it continuous. Continuous in the sense, unit gap between two consecutive sample.
+5. Deep Learning : Apply LSTM on the dataset and get a suitable schedule for each user.
+6. Similarity checking between two user's schedule.
+7. Android app integration : Get query from the app, run the python script for best matching on the cloud and return the propagate back to the user.
+
+Gaussian : 
+In probability theory, Gaussian distribution a statistical distribution where most of the values tend to cluster towards the middle of the range of independent variable and rest of the values are symmetrically distributed towards either extreme.
+The probability density function for variable x is defined as,
+
+where u = mean and s = standard deviation
+
+One practical example is the distribution of height of each person sampled over a huge population will behave like Gaussian distribution. This is because most of the people are of average height. Number of people shorter and number of people taller than average height are almost equal and also number of very short or very tall people is significantly less.
+
+
+
+
+Matching users :
+
+We have computed the daily schedules for each user in the previous section. Now we find the most suitable people who are having almost same schedule as my schedule(or the user's).
+
+Algorithm:
+s1 <- schedule of first user
+s2 <- schedule of second user
+
+G <- Gaussian function
+
+score <- 0
+
+for i over s1:
+	for j over s2:
+		similarity_per_index = [0,0,0,.....,0,0]
+		if s1[i] == s2[j]:
+			similarity_per_index[j] = 1
+
+	result[] = similarity_per_index * G
+	score += sum_of_elements(result)
+
+score += score_by_distance(residensial_place1,residensial_place2)
+score += score_by_distance(workplace1,workplace2)
+
+
+This algorithm finds the similarity index between a pair of users. From a group of people, we can thus order them according to similarity_index values.
+
+
+Deep Learning :
+
+Datasets:
+Google Location History gives almost 70,000 entries for 10 users. We have taken only Location History of last 3 months only.
+After refinement, the size becomes 60,000 per user. Total number of features is 745. So our input matrix becomes 60000*745(per user). The number of classes to be classified in is 13.
+
+Model:
+We have used LSTM(Long short-term memory) to calculate likely schedule of a user. 
+
+Different parameters:
+
+activation function : RELU(Rectified Linear Unit) in the LSTM.
+
+Softmax : As our problem is multiclass classification problem, softmax will work fine. It squeezes the output to a value between 0 and 1, which we can use a probabilities of a particular class.
+Softmax function is defined as,
+
+
+
+Result : 
 
 

@@ -75,9 +75,9 @@ y_training_set = np.delete(y_training_set, (0), axis=0)
 x_training_set.astype(int)
 y_training_set.astype(int)
 
-from keras.utils import to_categorical
-x_training_set = to_categorical(x_training_set)
-y_training_set = to_categorical(y_training_set)
+# from keras.utils import to_categorical
+# x_training_set = to_categorical(x_training_set)
+# y_training_set = to_categorical(y_training_set)
 
 
 print(x_training_set.shape)
@@ -113,8 +113,8 @@ model = Sequential()
 # Dense(64) is a fully-connected layer with 64 hidden units.
 # in the first layer, you must specify the expected input data shape:
 # here, 20-dimensional vectors.
-model.add(LSTM(units=1024, activation='relu', input_shape=(39,223)))
-model.add(Dense(units=223, activation='softmax'))
+model.add(LSTM(units=1024, activation='relu', input_dim=39))
+model.add(Dense(units=1, activation='softmax'))
 model.summary()
 
 model.compile(loss='categorical_crossentropy',

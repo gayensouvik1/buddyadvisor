@@ -26,7 +26,10 @@ connection = MySQLdb.connect(host = "localhost", user = "root", passwd = "", db 
 cursor = connection.cursor ()
 
 # execute the SQL query using execute() method.
-cursor.execute ("select * from refined_data where user_id=2")
+cursor.execute ("select * from continuous_data")
+
+
+
 
 # fetch all of the rows from the query
 data = cursor.fetchall ()
