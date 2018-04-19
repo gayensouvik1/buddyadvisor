@@ -4,6 +4,9 @@
 
 # import the MySQLdb and sys modules
 
+
+import sys
+
 import numpy as np
 
 from math import pi, sqrt, exp
@@ -22,16 +25,17 @@ g = gauss(96,sigma)
 g = np.roll(g,48)
 
 
-import matplotlib.pyplot as plt
-count, bins, ignored = plt.hist(g, 30, normed=True)
-plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
-np.exp( - (bins - mu)**2 / (2 * sigma**2) ),
-linewidth=2, color='r')
-plt.show()
+# import matplotlib.pyplot as plt
+# count, bins, ignored = plt.hist(g, 30, normed=True)
+# plt.plot(bins, 1/(sigma * np.sqrt(2 * np.pi)) *
+# np.exp( - (bins - mu)**2 / (2 * sigma**2) ),
+# linewidth=2, color='r')
+# plt.show()
 
 
-user_id = 1
-activity = 'gym'
+user_id = int(sys.argv[1])
+activity = sys.argv[2]
+
 
 
 def cal(time):
@@ -91,6 +95,7 @@ import MySQLdb
 import sys
 import numpy as np
 
+
 # open a database connection
 # be sure to change the host IP address, username, password and database name to match your own
 connection = MySQLdb.connect(host = "localhost", user = "root", passwd = "", db = "buddyadvisor",unix_socket="/opt/lampp/var/mysql/mysql.sock")
@@ -115,11 +120,20 @@ mydata = np.array(data)
 
 result = []
 for i in range (0,len(mydata)):
-	result.append((i+1,similarity_matching(mydata[user_id-1],mydata[i])))
+	if i+1!=user_id:
+		result.append((i+1,similarity_matching(mydata[user_id-1],mydata[i])))
 
 result = sorted(result,key=lambda x: x[1],reverse=True)
+w_result = ""+str(result[0][0])
+
+for i in range(1,len(result)):
+	w_result = w_result+"\n"+str(result[i][0])
 
 print(result)
+
+f = open('helloworld.txt','w+')
+f.write(w_result)
+f.close()
 	
 		
 
