@@ -33,9 +33,11 @@ g = np.roll(g,48)
 # plt.show()
 
 
-user_id = int(sys.argv[1])
+# user_id = int(sys.argv[1])
+user_id = sys.argv[1]
 activity = sys.argv[2]
-
+# user_id = "OPqacBiKHFYoieOI2abLCdSLHYx1"
+# activity = "gym"
 
 
 def cal(time):
@@ -108,9 +110,14 @@ cursor.execute ("select * from schedule where day=1 order by user_id")
 # fetch all of the rows from the query
 data = cursor.fetchall ()
 
+cursor.execute("select * from users")
+users = cursor.fetchall()
+users = np.array(users)
+
+user_id = list(users[:,1]).index(user_id)+1
 
 mydata = np.array(data)
-# mydata = filter(mydata,activity)
+mydata1 = filter(mydata,activity)
 
 # print(mydata)
 # mydata = mapping(data,placename)
@@ -118,22 +125,21 @@ mydata = np.array(data)
 
 # print(similarity_matching(mydata[user_id-1],mydata[0]))
 
+
 result = []
-for i in range (0,len(mydata)):
-	if i+1!=user_id:
-		result.append((i+1,similarity_matching(mydata[user_id-1],mydata[i])))
+for i in range (0,len(mydata1)):
+	if (i+1)!=user_id:
+		# print(i+1,user_id)
+		result.append((i+1,similarity_matching(mydata[user_id-1],mydata1[i])))
 
 result = sorted(result,key=lambda x: x[1],reverse=True)
-w_result = ""+str(result[0][0])
+w_result = ""+users[list(users[:,0]).index(str(result[0][0]))][1]
 
 for i in range(1,len(result)):
-	w_result = w_result+"\n"+str(result[i][0])
+	w_result = w_result+"\n"+users[list(users[:,0]).index(str(result[i][0]))][1]
 
-print(result)
 
-f = open('helloworld.txt','w+')
-f.write(w_result)
-f.close()
+print(w_result)
 	
 		
 
